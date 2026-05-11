@@ -37,11 +37,12 @@ export class RegistrationListComponent implements OnInit {
     this.loading = true;
     this.regSvc.getAll().subscribe({
       next: (res) => {
-        this.dataSource.data = res.data;
+        const data = res?.data || [];
+        this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.total     = res.data.length;
-        this.usingMcal = res.data.filter(r => r.is_using_sinar_mcal).length;
+        this.total     = data.length;
+        this.usingMcal = data.filter(r => r.is_using_sinar_mcal).length;
         this.loading   = false;
       },
       error: () => { this.loading = false; }

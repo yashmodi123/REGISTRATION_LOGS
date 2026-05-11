@@ -113,8 +113,9 @@ export class LogsComponent implements OnInit {
 
     this.logSvc.getLogs(f).subscribe({
       next: (res) => {
-        this.allLogs = res.data;
-        this.dataSource.data = res.data;
+        const data = res?.data || [];
+        this.allLogs = data;
+        this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.loading = false;
@@ -137,13 +138,14 @@ export class LogsComponent implements OnInit {
   }
 
   downloadCSV() {
-    if (this.dataSource.data.length === 0) {
+    const data = this.dataSource.data || [];
+    if (data.length === 0) {
       this.snack.open('No data to export.', 'OK', { duration: 3000 });
       return;
     }
 
     const headers = ['ID', 'Type', 'Machine #', 'Company', 'Email', 'Message', 'Created At'];
-    const rows = this.dataSource.data.map(l => [
+    const rows = data.map(l => [
       l.id,
       l.type,
       l.registration?.machine_number || '',
@@ -176,8 +178,11 @@ export class LogsComponent implements OnInit {
   viewDetails(log: Log) {
     this.dialog.open(LogDetailDialogComponent, {
       data: log,
-      width: '520px',
-      maxHeight: '80vh'
+      width: '60vw',
+      maxWidth: '1000px',
+      minWidth: '350px',
+      maxHeight: '90vh',
+      panelClass: 'premium-dialog'
     });
   }
 }
