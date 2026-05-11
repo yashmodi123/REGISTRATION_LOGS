@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
 import { RegistrationService } from '../../../core/services/registration.service';
 
 @Component({
@@ -57,7 +58,7 @@ export class RegistrationFormComponent implements OnInit {
       ? this.regSvc.update(this.regId!, val)
       : this.regSvc.create(val);
 
-    action.subscribe({
+    action.pipe(finalize(() => this.saving = false)).subscribe({
       next: () => {
         this.snack.open(
           this.isEdit ? 'Registration updated.' : 'Machine registered.',
@@ -68,7 +69,6 @@ export class RegistrationFormComponent implements OnInit {
       error: (err) => {
         this.snack.open(err?.error?.errors?.[0]?.msg || err?.error?.error || 'Operation failed.', 'OK',
           { duration: 4000, panelClass: 'snack-error' });
-        this.saving = false;
       }
     });
   }

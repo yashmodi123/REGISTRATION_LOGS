@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
@@ -17,16 +18,23 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve Static Frontend Files
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/user-auth', userAuthRoutes);
-
 app.use('/api/logs', logRoutes);
+
+// Catch-all for Frontend SPA (serve index.html)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
 
 // Error Handling Middleware
 app.use(errorHandler);

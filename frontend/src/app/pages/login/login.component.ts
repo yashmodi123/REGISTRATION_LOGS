@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -33,12 +34,13 @@ export class LoginComponent {
     this.errorMsg = '';
     const { email, password } = this.form.value;
 
-    this.auth.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/dashboard/registrations']),
-      error: (err) => {
-        this.errorMsg = err?.error?.error || 'Invalid email or password.';
-        this.loading  = false;
-      }
-    });
+    this.auth.login(email!, password!)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => this.router.navigate(['/dashboard/registrations']),
+        error: (err) => {
+          this.errorMsg = err?.error?.error || 'Invalid email or password.';
+        }
+      });
   }
 }

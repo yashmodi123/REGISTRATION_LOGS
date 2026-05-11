@@ -25,19 +25,26 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Start Date</mat-label>
-      <mat-icon matPrefix>event</mat-icon>
-      <input matInput [matDatepicker]="dpStart" [(ngModel)]="filters.startDate" id="filter-start"/>
-      <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
-      <mat-datepicker #dpStart></mat-datepicker>
+      <mat-label>Quick Range</mat-label>
+      <mat-select (selectionChange)="onRangeChange($event.value)" id="filter-range">
+        <mat-option value="today">Today</mat-option>
+        <mat-option value="24h">Last 24 Hours</mat-option>
+        <mat-option value="7d">Last 7 Days</mat-option>
+        <mat-option value="30d">Last 30 Days</mat-option>
+        <mat-option value="custom">Custom</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>End Date</mat-label>
-      <mat-icon matPrefix>event</mat-icon>
-      <input matInput [matDatepicker]="dpEnd" [(ngModel)]="filters.endDate" id="filter-end"/>
-      <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
-      <mat-datepicker #dpEnd></mat-datepicker>
+      <mat-label>Start Date & Time</mat-label>
+      <mat-icon matPrefix>schedule</mat-icon>
+      <input matInput type="datetime-local" [(ngModel)]="filters.startDate" id="filter-start"/>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>End Date & Time</mat-label>
+      <mat-icon matPrefix>schedule</mat-icon>
+      <input matInput type="datetime-local" [(ngModel)]="filters.endDate" id="filter-end"/>
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="load()" id="btn-apply-filter">

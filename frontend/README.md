@@ -1,59 +1,41 @@
-# AdminPortal
+# Device Login Admin — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+The administrative dashboard for managing device registrations. Built with **Angular 21** and **Angular Material**.
 
-## Development server
+## 📋 Prerequisites
+- **Node.js**: v18.x or higher
+- **Angular CLI**: `npm install -g @angular/cli`
 
-To start a local development server, run:
+## ⚙️ Installation
 
-```bash
-ng serve
-```
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+2. **Configuration**:
+   The API URL is configured in `src/environments/environment.ts`. By default, it uses `/api` (relative path) to work seamlessly when hosted by the backend.
 
-## Code scaffolding
+3. **Development Server**:
+   Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🏗️ Production Build & Deployment
+To deploy the frontend to the backend server:
 
-```bash
-ng generate component component-name
-```
+1. **Build the project**:
+   ```bash
+   npm run build
+   ```
+   This generates optimized files in `dist/admin-portal/browser/`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+2. **Deploy to Backend**:
+   Copy all files from `dist/admin-portal/browser/` into the `Backend/public/` folder.
+   
+   **One-Liner (Windows PowerShell):**
+   ```powershell
+   npm run build; xcopy /E /I /Y dist\admin-portal\browser\* ..\Backend\public\
+   ```
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🎨 UI & Theming
+- **Material Design**: Uses Angular Material components for all UI elements.
+- **Custom Theme**: Global styles and colors are defined in `src/styles.scss` using CSS variables. You can change the `--color-primary` and other variables to re-theme the entire application.

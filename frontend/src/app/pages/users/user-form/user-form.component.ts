@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
 
 @Component({
@@ -57,7 +58,7 @@ export class UserFormComponent implements OnInit {
       ? this.userSvc.update(this.userId!, { username: val.username!, email: val.email! })
       : this.userSvc.create({ username: val.username!, email: val.email!, password: val.password! });
 
-    action.subscribe({
+    action.pipe(finalize(() => this.saving = false)).subscribe({
       next: () => {
         this.snack.open(this.isEdit ? 'Updated successfully.' : 'Admin created.', 'OK',
           { duration: 3000, panelClass: 'snack-success' });
@@ -66,7 +67,6 @@ export class UserFormComponent implements OnInit {
       error: (err) => {
         this.snack.open(err?.error?.error || 'Operation failed.', 'OK',
           { duration: 4000, panelClass: 'snack-error' });
-        this.saving = false;
       }
     });
   }
