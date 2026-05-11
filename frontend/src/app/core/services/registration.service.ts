@@ -27,8 +27,12 @@ export class RegistrationService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<{ success: boolean; data: Registration[] }> {
-    return this.http.get<any>(this.base);
+  getAll(filters: any = {}): Observable<{ success: boolean; data: Registration[]; total: number; page: number; limit: number; totalPages: number }> {
+    let params = {};
+    if (filters) {
+      params = { ...filters };
+    }
+    return this.http.get<any>(this.base, { params });
   }
 
   getByEmail(email: string): Observable<{ success: boolean; data: Registration }> {

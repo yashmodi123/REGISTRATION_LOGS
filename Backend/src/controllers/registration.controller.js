@@ -15,8 +15,8 @@ const getProfile = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const registrations = await registrationService.getAllRegistrations();
-    res.status(200).json({ success: true, data: registrations });
+    const result = await registrationService.getAllRegistrations(req.query);
+    res.status(200).json({ success: true, ...result });
   } catch (error) {
     next(error);
   }

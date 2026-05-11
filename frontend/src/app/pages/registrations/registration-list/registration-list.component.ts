@@ -33,24 +33,37 @@ export class RegistrationListComponent implements OnInit {
 
   ngOnInit() { this.load(); }
 
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => this.load());
+  }
+
   load() {
     this.loading = true;
-    this.regSvc.getAll().subscribe({
+    const params = {
+      page: this.paginator ? this.paginator.pageIndex + 1 : 1,
+      limit: this.paginator ? this.paginator.pageSize : 10,
+      search: this.searchQuery || ''
+    };
+
+    this.regSvc.getAll(params).subscribe({
       next: (res) => {
         const data = res?.data || [];
         this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.total     = data.length;
-        this.usingMcal = data.filter(r => r.is_using_sinar_mcal).length;
-        this.loading   = false;
+        // Note: MatSort is still client-side for the current page, 
+        // but the data itself is paginated from the server.
+        this.total = res.total || 0;
+        // this.usingMcal = data.filter(r => r.is_using_sinar_mcal).length; // This would only be for the current page now
+        this.loading = false;
       },
       error: () => { this.loading = false; }
     });
   }
 
+  searchQuery = '';
   applyFilter(event: Event) {
-    this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.searchQuery = (event.target as HTMLInputElement).value;
+    if (this.paginator) this.paginator.pageIndex = 0;
+    this.load();
   }
 
   viewLogs(email: string) {
