@@ -1,6 +1,7 @@
 const sequelize = require('../config/db');
 const Registration = require('./registration.model');
 const Log = require('./log.model');
+const User = require('./user.model');
 
 // Relationships
 Registration.hasMany(Log, { foreignKey: 'user_id', as: 'logs' });
@@ -19,5 +20,7 @@ module.exports = {
   sequelize,
   Registration,
   Log,
+  User,
   syncDatabase
 };
+

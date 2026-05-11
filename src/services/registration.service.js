@@ -14,6 +14,36 @@ const getRegistrationByEmail = async (email) => {
   return user;
 };
 
+const getAllRegistrations = async () => {
+  return await Registration.findAll({
+    order: [['created_at', 'DESC']]
+  });
+};
+
+const updateRegistration = async (id, data) => {
+  const reg = await Registration.findByPk(id);
+  if (!reg) {
+    const error = new Error('Registration not found');
+    error.statusCode = 404;
+    throw error;
+  }
+  return await reg.update(data);
+};
+
+const deleteRegistration = async (id) => {
+  const reg = await Registration.findByPk(id);
+  if (!reg) {
+    const error = new Error('Registration not found');
+    error.statusCode = 404;
+    throw error;
+  }
+  await reg.destroy();
+  return { message: 'Registration deleted successfully' };
+};
+
 module.exports = {
-  getRegistrationByEmail
+  getRegistrationByEmail,
+  getAllRegistrations,
+  updateRegistration,
+  deleteRegistration
 };

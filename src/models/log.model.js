@@ -16,7 +16,7 @@ const Log = sequelize.define('Log', {
     allowNull: true
   },
   type: {
-    type: DataTypes.ENUM('USAGE', 'ERROR'),
+    type: DataTypes.STRING,
     allowNull: false
   },
   message: {

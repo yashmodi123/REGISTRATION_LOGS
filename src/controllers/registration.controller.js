@@ -13,6 +13,36 @@ const getProfile = async (req, res, next) => {
   }
 };
 
+const getAll = async (req, res, next) => {
+  try {
+    const registrations = await registrationService.getAllRegistrations();
+    res.status(200).json({ success: true, data: registrations });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const result = await registrationService.updateRegistration(req.params.id, req.body);
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const remove = async (req, res, next) => {
+  try {
+    const result = await registrationService.deleteRegistration(req.params.id);
+    res.status(200).json({ success: true, ...result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
-  getProfile
+  getProfile,
+  getAll,
+  update,
+  remove
 };

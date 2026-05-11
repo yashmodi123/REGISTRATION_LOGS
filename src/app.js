@@ -6,7 +6,7 @@ const errorHandler = require('./middlewares/error.middleware');
 
 const authRoutes = require('./routes/auth.routes');
 const registrationRoutes = require('./routes/registration.routes');
-
+const userAuthRoutes = require('./routes/user.auth.routes');
 const logRoutes = require('./routes/log.routes');
 
 const app = express();
@@ -22,6 +22,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', registrationRoutes);
+app.use('/user-auth', userAuthRoutes);
 
 app.use('/logs', logRoutes);
 

@@ -1,11 +1,9 @@
 const express = require('express');
 const { body } = require('express-validator');
 const logController = require('../controllers/log.controller');
-
+const authenticateToken = require('../middlewares/auth.middleware');
 
 const router = express.Router();
-
-
 
 /**
  * @swagger
@@ -18,9 +16,10 @@ const router = express.Router();
  * @swagger
  * /logs:
  *   get:
- *     summary: Get all logs (with optional filters)
+ *     summary: Get all logs — requires JWT (authorized users only)
  *     tags: [Logs]
-
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: email
@@ -50,29 +49,19 @@ const router = express.Router();
  *         description: List of logs
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
  *             example:
  *               success: true
- *               data: [
- *                 {
- *                   id: 1,
- *                   email: "test@example.com",
- *                   type: "USAGE",
- *                   message: "User logged in",
- *                   details: "{\"ip\":\"127.0.0.1\"}",
+ *               data:
+ *                 - id: 1
+ *                   email: "test@example.com"
+ *                   type: "USAGE"
+ *                   message: "User registered successfully"
+ *                   details: "{\"ip\":\"127.0.0.1\"}"
  *                   created_at: "2024-01-01T12:00:00.000Z"
- *                 }
- *               ]
+ *       401:
+ *         description: Unauthorized – token missing or invalid
  */
-router.get('/', logController.getLogs);
+router.get('/', authenticateToken, logController.getLogs);
 
 /**
  * @swagger
