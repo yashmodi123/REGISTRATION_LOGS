@@ -59,9 +59,9 @@
       <ng-container matColumnDef="is_using_sinar_mcal">
         <th mat-header-cell *matHeaderCellDef>SINAR-MCAL</th>
         <td mat-cell *matCellDef="let r">
-          <mat-chip [class]="r.is_using_sinar_mcal ? 'chip-success' : 'chip-error'">
+          <span class="chip" [ngClass]="r.is_using_sinar_mcal ? 'chip-success' : 'chip-error'">
             {{ r.is_using_sinar_mcal ? 'Yes' : 'No' }}
-          </mat-chip>
+          </span>
         </td>
       </ng-container>
 

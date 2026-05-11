@@ -1,115 +1,78 @@
-.shell {
-  height: 100vh;
-}
-
 // ── Sidebar ──────────────────────────────────────────────────────────────────
 .sidenav {
   width: var(--sidebar-width);
-  background: var(--color-primary-dark); // Use the theme's blue-dark
-  border-right: none;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.5);
 
   .sidenav-header {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 24px 16px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.2);
 
-    .logo-box {
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      
-      mat-icon { color: var(--color-primary); font-size: 22px; width: 22px; height: 22px; }
-    }
+    .brand-logo { height: 40px; width: auto; object-fit: contain; }
 
     .brand {
       display: flex;
       flex-direction: column;
-
-      .brand-name {
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1.2;
-      }
-      .brand-sub {
-        font-size: 0.7rem;
-        color: rgba(255,255,255,0.7);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
+      .brand-name { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2; }
+      .brand-sub { font-size: 0.65rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px; }
     }
   }
 
-  mat-divider { background: rgba(255,255,255,0.2) !important; }
+  mat-divider { background: var(--color-divider) !important; }
 
   .nav-list {
     flex: 1;
     padding: 16px 0;
 
     a[mat-list-item] {
-      height: 50px !important;
+      height: 48px !important;
       margin: 4px 12px;
-      border-radius: 8px;
-      color: rgba(255,255,255,0.85) !important; // High visibility white
-      transition: all 0.3s;
-      
-      mat-icon { 
-        color: rgba(255,255,255,0.7); 
-        margin-right: 12px;
-      }
+      border-radius: var(--radius-md);
+      color: var(--color-text-secondary) !important;
+      transition: all 0.2s ease;
+
+      mat-icon { color: var(--color-text-secondary); margin-right: 12px; transition: color 0.2s; }
 
       &:hover {
-        background: rgba(255,255,255,0.15) !important;
+        background: #D96A00 !important; // Hover Tab BG
         color: #fff !important;
         mat-icon { color: #fff; }
       }
 
       &.active-link {
-        background: #fff !important; // Solid white background for active
-        color: var(--color-primary-dark) !important; // Blue text for active
+        background: var(--color-primary-light) !important; // Active Tab BG
+        color: #fff !important;
         font-weight: 700;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        
-        mat-icon { color: var(--color-primary-dark); }
+        box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+        mat-icon { color: #fff; }
       }
     }
   }
 
   .sidenav-footer {
     padding: 16px;
-    background: rgba(0,0,0,0.1);
-
+    background: rgba(0, 0, 0, 0.2);
     .user-info {
       display: flex;
       align-items: center;
       gap: 12px;
-
-      .user-avatar {
-        font-size: 40px;
-        width: 40px;
-        height: 40px;
-        color: rgba(255,255,255,0.5);
-      }
+      .user-avatar { font-size: 32px; width: 32px; height: 32px; color: var(--color-text-hint); }
       p { margin: 0; }
-      .user-name  { font-size: 0.9rem; font-weight: 600; color: #fff; }
-      .user-email { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+      .user-name { font-size: 0.85rem; font-weight: 600; color: #fff; }
+      .user-email { font-size: 0.7rem; color: var(--color-text-secondary); }
     }
   }
 }
 
 // ── Topbar ───────────────────────────────────────────────────────────────────
 .topbar {
-  background: #fff !important;
+  background: var(--topbar-bg) !important;
   color: var(--color-text-primary) !important;
   border-bottom: 1px solid var(--color-border);
   height: var(--topbar-height);
@@ -118,22 +81,13 @@
   z-index: 100;
 
   .menu-btn { color: var(--color-primary); }
-
-  .topbar-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-  }
+  .topbar-title { font-size: 1.1rem; font-weight: 600; color: var(--color-text-primary); }
   .spacer { flex: 1; }
 }
 
 // ── Content ──────────────────────────────────────────────────────────────────
-.main-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
+.shell { height: 100vh; }
+.main-content { display: flex; flex-direction: column; height: 100%; }
 .content-area {
   flex: 1;
   padding: 24px;

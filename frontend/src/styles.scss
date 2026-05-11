@@ -1,64 +1,95 @@
 @use '@angular/material' as mat;
 
-// ── Theme tokens (change here to retheme the whole app) ─────────────────────
+// ── Design Tokens ────────────────────────────────────────────────────────────
 :root {
-  --color-primary:       #1565C0;
-  --color-primary-light: #1E88E5;
-  --color-primary-dark:  #0D47A1;
-  --color-accent:        #0288D1;
-  --color-warn:          #D32F2F;
+  // Brand Colors
+  --color-primary: #F57C00; // Orange Accent
+  --color-primary-light: #FF7A00; // Active Tab BG
+  --color-primary-dark: #E66A00; // Dark Orange Hover
+  --color-accent: #FF7A00;
+  --color-warn: #D32F2F;
 
-  --color-bg:            #F0F4F8;
-  --color-surface:       #FFFFFF;
-  --color-surface-2:     #E8EFF7;
-  --color-border:        #C5D3E8;
+  // Backgrounds & Surfaces
+  --color-bg: #3b3b3b; // Main Dark Gray
+  --color-surface: #1E1E1E; // Soft Dark Cards
+  --color-surface-2: #252525; // List Hover / Secondary
+  --color-border: #2E2E2E; // Gray Border
+  --color-divider: #3A3A3A; // Subtle Gray Divider
 
-  --color-text-primary:  #1A2A4A;
-  --color-text-secondary:#4A6080;
-  --color-text-hint:     #8AA0BB;
-
-  --color-success:       #2E7D32;
-  --color-error:         #C62828;
-
-  --shadow-sm: 0 1px 3px rgba(21,101,192,0.10);
-  --shadow-md: 0 4px 16px rgba(21,101,192,0.13);
-  --shadow-lg: 0 8px 32px rgba(21,101,192,0.16);
-
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-
-  --sidebar-width: 240px;
+  // Components Layout
+  --sidebar-bg: #0A0A0A; // Pure Black Sidebar
+  --topbar-bg: #000000; // Pure Black Topbar
+  --sidebar-width: 260px;
   --topbar-height: 64px;
+
+  // Text
+  --color-text-primary: #FFFFFF; // White
+  --color-text-secondary: #BDBDBD; // Light Gray
+  --color-text-hint: #757575;
+
+  // Feedback
+  --color-success: #4CAF50;
+  --color-error: #F44336;
+
+  // Shadows & Radius
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.8);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
 }
 
-// ── Angular Material theme ───────────────────────────────────────────────────
+// ── Angular Material Global Config ───────────────────────────────────────────
 html {
   height: 100%;
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$cyan-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$cyan-palette,
+        theme-type: dark),
+      typography: Roboto,
+      density: 0,
+    ));
 }
 
 body {
-  color-scheme: light;
+  color-scheme: dark;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: 'Roboto', sans-serif;
   margin: 0;
   height: 100%;
+  -webkit-font-smoothing: antialiased;
 }
 
-// ── Global utilities ─────────────────────────────────────────────────────────
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-a { color: var(--color-primary); text-decoration: none; }
+// ── Global Typography & Links ────────────────────────────────────────────────
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s;
 
+  &:hover {
+    color: var(--color-primary-light);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  margin-top: 0;
+}
+
+// ── Layout Shared Classes ────────────────────────────────────────────────────
 .page-header {
   display: flex;
   align-items: center;
@@ -68,49 +99,111 @@ a { color: var(--color-primary); text-decoration: none; }
   h1 {
     margin: 0;
     font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
+    font-weight: 700;
+    letter-spacing: -0.5px;
   }
 }
 
+// ── Common UI Components ─────────────────────────────────────────────────────
 .card {
   background: var(--color-surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   padding: 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.chip-success { background: #E8F5E9 !important; color: #2E7D32 !important; font-weight: 500; }
-.chip-error   { background: #FFEBEE !important; color: #C62828 !important; font-weight: 500; }
-.chip-usage   { background: #E3F2FD !important; color: #1565C0 !important; font-weight: 500; }
+.chip {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 
-.text-muted { color: var(--color-text-secondary); }
-.text-hint  { color: var(--color-text-hint); font-size: 0.85rem; }
+  &.chip-success {
+    background: rgba(76, 175, 80, 0.12) !important;
+    color: #81C784 !important;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+  }
 
-// ── Form layout ──────────────────────────────────────────────────────────────
+  &.chip-error {
+    background: rgba(244, 67, 54, 0.12) !important;
+    color: #E57373 !important;
+    border: 1px solid rgba(244, 67, 54, 0.2);
+  }
+
+  &.chip-usage {
+    background: rgba(245, 124, 0, 0.12) !important;
+    color: #FFB74D !important;
+    border: 1px solid rgba(245, 124, 0, 0.2);
+  }
+}
+
+// ── Forms & Inputs ───────────────────────────────────────────────────────────
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 16px;
-  @media (max-width: 600px) { grid-template-columns: 1fr; }
-}
-.form-full { grid-column: 1 / -1; }
-
-mat-form-field { width: 100%; }
-
-// ── Table tweaks ─────────────────────────────────────────────────────────────
-.mat-mdc-table { width: 100%; }
-.mat-mdc-row:hover { background: var(--color-surface-2) !important; }
-.mat-column-actions { width: 120px; text-align: center !important; }
-
-// ── Buttons ──────────────────────────────────────────────────────────────────
-.btn-icon-row {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-// ── Snackbar ─────────────────────────────────────────────────────────────────
-.snack-success .mdc-snackbar__surface { background: var(--color-success) !important; }
-.snack-error   .mdc-snackbar__surface { background: var(--color-error)   !important; }
+.form-full {
+  grid-column: 1 / -1;
+}
+
+mat-form-field {
+  width: 100%;
+
+  .mat-mdc-form-field-subscript-wrapper {
+    font-size: 0.75rem;
+  }
+}
+
+// ── Tables ───────────────────────────────────────────────────────────────────
+.mat-mdc-table {
+  width: 100%;
+  background: transparent !important;
+}
+
+.mat-mdc-header-row {
+  background: var(--color-surface-2);
+}
+
+th.mat-mdc-header-cell {
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.mat-mdc-row {
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+}
+
+// ── Feedback & Misc ──────────────────────────────────────────────────────────
+.text-muted {
+  color: var(--color-text-secondary);
+}
+
+.text-hint {
+  color: var(--color-text-hint);
+}
+
+.snack-success .mdc-snackbar__surface {
+  background: var(--color-success) !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background: var(--color-error) !important;
+}

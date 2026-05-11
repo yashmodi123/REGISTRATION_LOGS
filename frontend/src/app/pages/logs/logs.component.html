@@ -114,7 +114,9 @@
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
         <td mat-cell *matCellDef="let l">
-          <mat-chip [class]="l.type === 'USAGE' ? 'chip-usage' : 'chip-error'">{{ l.type }}</mat-chip>
+          <span class="chip" [ngClass]="l.type === 'USAGE' ? 'chip-usage' : 'chip-error'">
+            {{ l.type }}
+          </span>
         </td>
       </ng-container>
 

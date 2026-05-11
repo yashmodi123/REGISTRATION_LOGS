@@ -16,10 +16,8 @@
         font-size: 0.8rem;
         font-weight: 600;
         
-        &.chip-usage { background: #e3f2fd; color: #1565c0; }
-        &.chip-error { background: #ffebee; color: #c62828; }
-        &.chip-reg   { background: #e8f5e9; color: #2e7d32; }
-        &.chip-user  { background: #fff3e0; color: #ef6c00; }
+        &.chip-usage { background: rgba(245, 124, 0, 0.15); color: #F57C00; }
+        &.chip-error { background: rgba(211, 47, 47, 0.15); color: #FF5252; }
       }
     }
   }
@@ -62,8 +60,8 @@
     mat-icon { font-size: 32px; width: 32px; height: 32px; color: var(--color-primary); }
     .val { display: block; font-size: 1.5rem; font-weight: 700; color: var(--color-primary); }
     .lbl { display: block; font-size: 0.8rem; color: var(--color-text-secondary); }
-    &.usage { mat-icon, .val { color: #1565C0; } }
-    &.error  { mat-icon, .val { color: #C62828; } }
+    &.usage { mat-icon, .val { color: #F57C00; } }
+    &.error  { mat-icon, .val { color: #FF5252; } }
   }
 }
 
