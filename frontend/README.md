@@ -34,6 +34,9 @@ To deploy the frontend to the backend server:
    **One-Liner (Windows PowerShell):**
    ```powershell
    npm run build; xcopy /E /I /Y dist\admin-portal\browser\* ..\Backend\public\
+   
+
+   npm run build; xcopy /E /I /Y "dist\admin-portal\browser\*" "..\Backend\public\"
    ```
 
 ## 🎨 UI & Theming

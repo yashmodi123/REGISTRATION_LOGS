@@ -23,6 +23,18 @@
       }
     }
   }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .btn-excel {
+      background-color: #2e7d32 !important; // Excel Green
+      color: #fff !important;
+      font-weight: 600;
+    }
+  }
 }
 
 .filter-card {

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { Op } = require('sequelize');
 const config = require('../config/config');
 const { recordLog } = require('../utils/logger');
 
@@ -21,10 +22,18 @@ const registerUser = async ({ username, email, password }) => {
 };
 
 /**
- * Login with email + password
+ * Login with email or username + password
  */
 const loginUser = async ({ email, password }) => {
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({
+    where: {
+      [Op.or]: [
+        { email: email },
+        { username: email }
+      ]
+    }
+  });
+
   if (!user) {
     const error = new Error('Invalid credentials');
     error.statusCode = 401;

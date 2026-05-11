@@ -136,6 +136,43 @@ export class LogsComponent implements OnInit {
     this.load();
   }
 
+  downloadCSV() {
+    if (this.dataSource.data.length === 0) {
+      this.snack.open('No data to export.', 'OK', { duration: 3000 });
+      return;
+    }
+
+    const headers = ['ID', 'Type', 'Machine #', 'Company', 'Email', 'Message', 'Created At'];
+    const rows = this.dataSource.data.map(l => [
+      l.id,
+      l.type,
+      l.registration?.machine_number || '',
+      l.registration?.company_name || '',
+      l.email || '',
+      l.message,
+      l.created_at
+    ]);
+
+    let csvContent = headers.join(',') + '\n';
+    rows.forEach(row => {
+      const formattedRow = row.map(val => {
+        const str = String(val).replace(/"/g, '""');
+        return `"${str}"`;
+      });
+      csvContent += formattedRow.join(',') + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `logs_export_${new Date().getTime()}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   viewDetails(log: Log) {
     this.dialog.open(LogDetailDialogComponent, {
       data: log,

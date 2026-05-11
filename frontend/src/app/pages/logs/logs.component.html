@@ -6,9 +6,14 @@
       <span class="chip chip-error">Errors: {{ errorCount }}</span>
     </div>
   </div>
-  <button mat-stroked-button (click)="clearFilters()" id="btn-clear-filters">
-    <mat-icon>filter_alt_off</mat-icon> Clear Filters
-  </button>
+  <div class="header-actions">
+    <button mat-flat-button class="btn-excel" (click)="downloadCSV()" [disabled]="loading || !dataSource.data.length" id="btn-download-csv">
+      <mat-icon>description</mat-icon> Export CSV
+    </button>
+    <button mat-stroked-button (click)="clearFilters()" id="btn-clear-filters">
+      <mat-icon>filter_alt_off</mat-icon> Clear Filters
+    </button>
+  </div>
 </div>
 
 <!-- Filter Card -->

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -20,10 +20,11 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
-      email:    ['', [Validators.required, Validators.email]],
+      email:    ['', [Validators.required]],
       password: ['', Validators.required]
     });
   }
@@ -35,11 +36,15 @@ export class LoginComponent {
     const { email, password } = this.form.value;
 
     this.auth.login(email!, password!)
-      .pipe(finalize(() => this.loading = false))
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }))
       .subscribe({
         next: () => this.router.navigate(['/dashboard/registrations']),
         error: (err) => {
-          this.errorMsg = err?.error?.error || 'Invalid email or password.';
+          this.errorMsg = err?.error?.error || 'Invalid identifier or password.';
+          this.cdr.detectChanges();
         }
       });
   }

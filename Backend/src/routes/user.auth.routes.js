@@ -114,7 +114,7 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Valid email is required'),
+    body('email').notEmpty().withMessage('Username or email is required'),
     body('password').notEmpty().withMessage('Password is required')
   ],
   userAuthController.login
