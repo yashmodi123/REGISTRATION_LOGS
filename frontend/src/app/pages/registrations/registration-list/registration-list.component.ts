@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -31,7 +33,19 @@ export class RegistrationListComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() { this.load(); }
+  private searchSubject = new Subject<string>();
+
+  ngOnInit() {
+    this.load();
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(val => {
+      this.searchQuery = val;
+      if (this.paginator) this.paginator.pageIndex = 0;
+      this.load();
+    });
+  }
 
   ngAfterViewInit() {
     this.paginator.page.subscribe(() => this.load());
@@ -49,10 +63,7 @@ export class RegistrationListComponent implements OnInit {
       next: (res) => {
         const data = res?.data || [];
         this.dataSource.data = data;
-        // Note: MatSort is still client-side for the current page, 
-        // but the data itself is paginated from the server.
         this.total = res.total || 0;
-        // this.usingMcal = data.filter(r => r.is_using_sinar_mcal).length; // This would only be for the current page now
         this.loading = false;
       },
       error: () => { this.loading = false; }
@@ -61,9 +72,8 @@ export class RegistrationListComponent implements OnInit {
 
   searchQuery = '';
   applyFilter(event: Event) {
-    this.searchQuery = (event.target as HTMLInputElement).value;
-    if (this.paginator) this.paginator.pageIndex = 0;
-    this.load();
+    const val = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(val);
   }
 
   viewLogs(email: string) {
