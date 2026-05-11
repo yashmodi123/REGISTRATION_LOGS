@@ -10,6 +10,9 @@ const getLogs = async ({ email, type, startDate, endDate }) => {
   
   if (type) {
     where.type = type;
+  } else {
+    // Only show machine-related logs, exclude 'USER' admin logs
+    where.type = { [Op.in]: ['USAGE', 'ERROR'] };
   }
   
   if (startDate || endDate) {
@@ -24,21 +27,27 @@ const getLogs = async ({ email, type, startDate, endDate }) => {
   
   return await Log.findAll({
     where,
+    include: [{
+      model: Registration,
+      as: 'registration',
+      attributes: ['machine_number', 'company_name'],
+      required: true // Inner join: only show logs if registration exists
+    }],
     order: [['created_at', 'DESC']]
   });
 };
 
-const createErrorLog = async ({ user_id, error_type, error_string }) => {
-  const user = await Registration.findByPk(user_id);
-  if (!user) {
-    const error = new Error('User not found');
+const createErrorLog = async ({ registration_id, error_type, error_string }) => {
+  const reg = await Registration.findByPk(registration_id);
+  if (!reg) {
+    const error = new Error('Registration not found');
     error.statusCode = 404;
     throw error;
   }
 
   return await Log.create({
-    user_id,
-    email: user.email,
+    registration_id,
+    email: reg.email,
     type: 'ERROR',
     message: error_type || 'General Error',
     details: error_string

@@ -1,3 +1,30 @@
+.page-header {
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    h1 { margin: 0; }
+    
+    .stats-chips {
+      display: flex;
+      gap: 12px;
+      
+      .chip {
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        
+        &.chip-usage { background: #e3f2fd; color: #1565c0; }
+        &.chip-error { background: #ffebee; color: #c62828; }
+        &.chip-reg   { background: #e8f5e9; color: #2e7d32; }
+        &.chip-user  { background: #fff3e0; color: #ef6c00; }
+      }
+    }
+  }
+}
+
 .filter-card {
   margin-bottom: 24px;
   .filter-row {
@@ -5,7 +32,10 @@
     gap: 12px;
     flex-wrap: wrap;
     align-items: flex-start;
-    mat-form-field { min-width: 220px; flex: 1; }
+    mat-form-field { min-width: 200px; flex: 1; }
+    .filter-group { display: flex; gap: 4px; flex: 2; min-width: 320px; }
+    .date-field { flex: 3; }
+    .time-field { flex: 1; min-width: 100px; }
     button { margin-top: 4px; height: 56px; }
   }
 }

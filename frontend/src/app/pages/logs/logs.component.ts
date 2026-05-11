@@ -15,11 +15,11 @@ import { LogDetailDialogComponent } from './log-detail-dialog/log-detail-dialog.
   styleUrls: ['./logs.component.scss']
 })
 export class LogsComponent implements OnInit {
-  cols = ['id', 'type', 'email', 'message', 'details', 'created_at'];
+  cols = ['id', 'type', 'machine_number', 'company_name', 'email', 'message', 'details', 'created_at'];
   dataSource = new MatTableDataSource<Log>();
   allLogs: Log[] = [];
   loading = true;
-  filters: { email?: string; type?: string; startDate?: string; endDate?: string } = {};
+  filters: { email?: string; type?: string; startDate?: Date; startTime?: string; endDate?: Date; endTime?: string } = {};
 
   get usageCount() { return this.allLogs.filter(l => l.type === 'USAGE').length; }
   get errorCount() { return this.allLogs.filter(l => l.type === 'ERROR').length; }
@@ -41,9 +41,10 @@ export class LogsComponent implements OnInit {
     const lastWeek = new Date();
     lastWeek.setDate(now.getDate() - 7);
     
-    // Format to YYYY-MM-DDTHH:mm for datetime-local input
-    this.filters.startDate = this.formatForInput(lastWeek);
-    this.filters.endDate   = this.formatForInput(now);
+    this.filters.startDate = lastWeek;
+    this.filters.startTime = this.formatTime(lastWeek);
+    this.filters.endDate   = now;
+    this.filters.endTime   = this.formatTime(now);
   }
 
   onRangeChange(range: string) {
@@ -67,18 +68,16 @@ export class LogsComponent implements OnInit {
         break;
     }
 
-    this.filters.startDate = this.formatForInput(start);
-    this.filters.endDate   = this.formatForInput(now);
+    this.filters.startDate = start;
+    this.filters.startTime = this.formatTime(start);
+    this.filters.endDate   = now;
+    this.filters.endTime   = this.formatTime(now);
     this.load();
   }
 
-  private formatForInput(date: Date): string {
+  private formatTime(date: Date): string {
     const pad = (n: number) => n < 10 ? '0' + n : n;
-    return date.getFullYear() + '-' +
-           pad(date.getMonth() + 1) + '-' +
-           pad(date.getDate()) + 'T' +
-           pad(date.getHours()) + ':' +
-           pad(date.getMinutes());
+    return pad(date.getHours()) + ':' + pad(date.getMinutes());
   }
 
   ngOnInit() {
@@ -96,10 +95,20 @@ export class LogsComponent implements OnInit {
     if (this.filters.type)  f.type  = this.filters.type;
 
     if (this.filters.startDate) {
-      f.startDate = new Date(this.filters.startDate).toISOString();
+      const d = new Date(this.filters.startDate);
+      if (this.filters.startTime) {
+        const [h, m] = this.filters.startTime.split(':');
+        d.setHours(+h, +m, 0);
+      }
+      f.startDate = d.toISOString();
     }
     if (this.filters.endDate) {
-      f.endDate = new Date(this.filters.endDate).toISOString();
+      const d = new Date(this.filters.endDate);
+      if (this.filters.endTime) {
+        const [h, m] = this.filters.endTime.split(':');
+        d.setHours(+h, +m, 59);
+      }
+      f.endDate = d.toISOString();
     }
 
     this.logSvc.getLogs(f).subscribe({

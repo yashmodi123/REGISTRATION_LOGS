@@ -4,8 +4,8 @@ const Log = require('./log.model');
 const User = require('./user.model');
 
 // Relationships
-Registration.hasMany(Log, { foreignKey: 'user_id', as: 'logs' });
-Log.belongsTo(Registration, { foreignKey: 'user_id', as: 'user' });
+Registration.hasMany(Log, { foreignKey: 'registration_id', as: 'logs' });
+Log.belongsTo(Registration, { foreignKey: 'registration_id', as: 'registration' });
 
 const syncDatabase = async () => {
   try {

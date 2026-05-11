@@ -11,7 +11,7 @@ const Log = sequelize.define('Log', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  user_id: {
+  registration_id: {
     type: DataTypes.INTEGER,
     allowNull: true
   },

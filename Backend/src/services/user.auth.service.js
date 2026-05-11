@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const config = require('../config/config');
+const { recordLog } = require('../utils/logger');
 
 /**
  * Register a new admin/user account
@@ -14,6 +15,7 @@ const registerUser = async ({ username, email, password }) => {
   }
 
   const user = await User.create({ username, email, password });
+  await recordLog(user.email, 'USER', 'New admin account registered', { id: user.id });
   const token = _signToken(user);
   return { user: _safeUser(user), token };
 };
@@ -37,6 +39,7 @@ const loginUser = async ({ email, password }) => {
   }
 
   const token = _signToken(user);
+  await recordLog(user.email, 'USER', 'Admin login successful');
   return { user: _safeUser(user), token };
 };
 

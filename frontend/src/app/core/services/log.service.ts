@@ -6,11 +6,15 @@ import { environment } from '../../../environments/environment';
 export interface Log {
   id: number;
   email: string | null;
-  user_id: number | null;
-  type: 'USAGE' | 'ERROR';
+  registration_id: number | null;
+  type: 'USAGE' | 'ERROR' | 'REGISTRATION' | 'USER';
   message: string;
   details: string | null;
   created_at: string;
+  registration?: {
+    machine_number: string;
+    company_name: string;
+  };
 }
 
 export interface LogFilters {

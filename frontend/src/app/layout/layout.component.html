@@ -2,7 +2,9 @@
   <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
   <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpen" class="sidenav">
     <div class="sidenav-header">
-      <img src="assets/logo.svg" alt="Logo" class="logo" onerror="this.style.display='none'"/>
+      <div class="logo-box">
+        <mat-icon>devices</mat-icon>
+      </div>
       <div class="brand">
         <span class="brand-name">Admin Portal</span>
         <span class="brand-sub">Device Registry</span>
@@ -12,13 +14,13 @@
     <mat-divider></mat-divider>
 
     <mat-nav-list class="nav-list">
-      <a mat-list-item routerLink="/dashboard/registrations" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>devices</mat-icon>
-        <span matListItemTitle>Registrations</span>
-      </a>
       <a mat-list-item routerLink="/dashboard/users" routerLinkActive="active-link">
         <mat-icon matListItemIcon>manage_accounts</mat-icon>
         <span matListItemTitle>Admin Users</span>
+      </a>
+      <a mat-list-item routerLink="/dashboard/registrations" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>devices</mat-icon>
+        <span matListItemTitle>Registrations</span>
       </a>
       <a mat-list-item routerLink="/dashboard/logs" routerLinkActive="active-link">
         <mat-icon matListItemIcon>receipt_long</mat-icon>

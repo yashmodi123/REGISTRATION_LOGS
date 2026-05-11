@@ -1,6 +1,11 @@
-<!-- Page Header -->
 <div class="page-header">
-  <h1>Log History</h1>
+  <div class="header-title">
+    <h1>Log History</h1>
+    <div class="stats-chips">
+      <span class="chip chip-usage">Registrations: {{ usageCount }}</span>
+      <span class="chip chip-error">Errors: {{ errorCount }}</span>
+    </div>
+  </div>
   <button mat-stroked-button (click)="clearFilters()" id="btn-clear-filters">
     <mat-icon>filter_alt_off</mat-icon> Clear Filters
   </button>
@@ -19,7 +24,7 @@
       <mat-label>Log Type</mat-label>
       <mat-select [(ngModel)]="filters.type" (selectionChange)="load()" id="filter-type">
         <mat-option value="">All</mat-option>
-        <mat-option value="USAGE">USAGE</mat-option>
+        <mat-option value="USAGE">REGISTRATION</mat-option>
         <mat-option value="ERROR">ERROR</mat-option>
       </mat-select>
     </mat-form-field>
@@ -35,17 +40,31 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Start Date & Time</mat-label>
-      <mat-icon matPrefix>schedule</mat-icon>
-      <input matInput type="datetime-local" [(ngModel)]="filters.startDate" id="filter-start"/>
-    </mat-form-field>
+    <div class="filter-group">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="dpStart" [(ngModel)]="filters.startDate" id="filter-start"/>
+        <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+        <mat-datepicker #dpStart></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Time</mat-label>
+        <input matInput type="time" [(ngModel)]="filters.startTime" id="filter-start-time"/>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>End Date & Time</mat-label>
-      <mat-icon matPrefix>schedule</mat-icon>
-      <input matInput type="datetime-local" [(ngModel)]="filters.endDate" id="filter-end"/>
-    </mat-form-field>
+    <div class="filter-group">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="dpEnd" [(ngModel)]="filters.endDate" id="filter-end"/>
+        <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+        <mat-datepicker #dpEnd></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Time</mat-label>
+        <input matInput type="time" [(ngModel)]="filters.endTime" id="filter-end-time"/>
+      </mat-form-field>
+    </div>
 
     <button mat-raised-button color="primary" (click)="load()" id="btn-apply-filter">
       <mat-icon>search</mat-icon> Apply
@@ -92,6 +111,16 @@
         <td mat-cell *matCellDef="let l">
           <mat-chip [class]="l.type === 'USAGE' ? 'chip-usage' : 'chip-error'">{{ l.type }}</mat-chip>
         </td>
+      </ng-container>
+
+      <ng-container matColumnDef="machine_number">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Machine #</th>
+        <td mat-cell *matCellDef="let l">{{ l.registration?.machine_number || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="company_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+        <td mat-cell *matCellDef="let l">{{ l.registration?.company_name || '—' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="email">

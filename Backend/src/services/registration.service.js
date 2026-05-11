@@ -1,4 +1,5 @@
 const { Registration } = require('../models');
+const { recordLog } = require('../utils/logger');
 
 const getRegistrationByEmail = async (email) => {
   const user = await Registration.findOne({
@@ -27,7 +28,9 @@ const updateRegistration = async (id, data) => {
     error.statusCode = 404;
     throw error;
   }
-  return await reg.update(data);
+  const updated = await reg.update(data);
+  await recordLog(updated.email, 'REGISTRATION', 'Registration updated by admin', data);
+  return updated;
 };
 
 const deleteRegistration = async (id) => {
@@ -37,7 +40,9 @@ const deleteRegistration = async (id) => {
     error.statusCode = 404;
     throw error;
   }
+  const email = reg.email;
   await reg.destroy();
+  await recordLog(email, 'REGISTRATION', 'Registration deleted by admin');
   return { message: 'Registration deleted successfully' };
 };
 
