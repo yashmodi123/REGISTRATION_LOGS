@@ -1,0 +1,91 @@
+<!-- Page Header -->
+<div class="page-header">
+  <h1>Admin Users</h1>
+  <button mat-raised-button color="primary" routerLink="/dashboard/users/new" id="btn-add-user">
+    <mat-icon>person_add</mat-icon> Add Admin
+  </button>
+</div>
+
+<!-- Stats strip -->
+<div class="stats-strip">
+  <div class="stat-card">
+    <mat-icon>group</mat-icon>
+    <div><span class="val">{{ users.length }}</span><span class="lbl">Total Admins</span></div>
+  </div>
+</div>
+
+<!-- Table card -->
+<div class="card table-card">
+  <!-- Search -->
+  <div class="table-toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Search by name or email</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Type to search..." id="user-search"/>
+    </mat-form-field>
+  </div>
+
+  <div class="table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
+
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+        <td mat-cell *matCellDef="let u">{{ u.id }}</td>
+      </ng-container>
+
+      <!-- Username -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let u">
+          <div class="user-chip">
+            <span class="avatar">{{ u.username[0].toUpperCase() }}</span>
+            {{ u.username }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+      </ng-container>
+
+      <!-- Created -->
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+        <td mat-cell *matCellDef="let u">{{ u.created_at | date:'dd MMM yyyy' }}</td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let u">
+          <div class="btn-icon-row">
+            <button mat-icon-button color="primary" matTooltip="Edit"
+                    [routerLink]="['/dashboard/users', u.id, 'edit']" [id]="'edit-user-'+u.id">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Delete"
+                    (click)="confirmDelete(u)" [id]="'del-user-'+u.id">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="cols"></tr>
+      <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-data" [attr.colspan]="cols.length">
+          <mat-icon>inbox</mat-icon> No admins found
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[10,25,50]" showFirstLastButtons></mat-paginator>
+</div>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

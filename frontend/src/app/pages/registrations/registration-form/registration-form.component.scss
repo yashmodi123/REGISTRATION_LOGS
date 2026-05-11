@@ -1,0 +1,10 @@
+.form-page-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 24px;
+  h2 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+}
+.form-card { max-width: 800px; }
+.toggle-row { padding: 8px 0; }
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 12px;
+  margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--color-border);
+}

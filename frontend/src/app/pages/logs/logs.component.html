@@ -1,0 +1,129 @@
+<!-- Page Header -->
+<div class="page-header">
+  <h1>Log History</h1>
+  <button mat-stroked-button (click)="clearFilters()" id="btn-clear-filters">
+    <mat-icon>filter_alt_off</mat-icon> Clear Filters
+  </button>
+</div>
+
+<!-- Filter Card -->
+<div class="card filter-card">
+  <div class="filter-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <mat-icon matPrefix>email</mat-icon>
+      <input matInput [(ngModel)]="filters.email" (keyup.enter)="load()" id="filter-email" placeholder="user@example.com"/>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Log Type</mat-label>
+      <mat-select [(ngModel)]="filters.type" (selectionChange)="load()" id="filter-type">
+        <mat-option value="">All</mat-option>
+        <mat-option value="USAGE">USAGE</mat-option>
+        <mat-option value="ERROR">ERROR</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Start Date</mat-label>
+      <mat-icon matPrefix>event</mat-icon>
+      <input matInput [matDatepicker]="dpStart" [(ngModel)]="filters.startDate" id="filter-start"/>
+      <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+      <mat-datepicker #dpStart></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>End Date</mat-label>
+      <mat-icon matPrefix>event</mat-icon>
+      <input matInput [matDatepicker]="dpEnd" [(ngModel)]="filters.endDate" id="filter-end"/>
+      <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+      <mat-datepicker #dpEnd></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="load()" id="btn-apply-filter">
+      <mat-icon>search</mat-icon> Apply
+    </button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-strip">
+  <div class="stat-card">
+    <mat-icon>receipt_long</mat-icon>
+    <div><span class="val">{{ allLogs.length }}</span><span class="lbl">Total Logs</span></div>
+  </div>
+  <div class="stat-card usage">
+    <mat-icon>check_circle</mat-icon>
+    <div><span class="val">{{ usageCount }}</span><span class="lbl">Usage</span></div>
+  </div>
+  <div class="stat-card error">
+    <mat-icon>error</mat-icon>
+    <div><span class="val">{{ errorCount }}</span><span class="lbl">Errors</span></div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="card table-card">
+  <div class="table-toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Search message…</mat-label>
+      <input matInput (keyup)="applySearch($event)" id="log-search"/>
+    </mat-form-field>
+  </div>
+
+  <div class="table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+        <td mat-cell *matCellDef="let l">{{ l.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let l">
+          <mat-chip [class]="l.type === 'USAGE' ? 'chip-usage' : 'chip-error'">{{ l.type }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let l">{{ l.email || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="message">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Message</th>
+        <td mat-cell *matCellDef="let l" class="msg-cell">{{ l.message }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef>Details</th>
+        <td mat-cell *matCellDef="let l">
+          <button mat-icon-button matTooltip="View Details" *ngIf="l.details"
+                  (click)="viewDetails(l)" [id]="'details-'+l.id">
+            <mat-icon>info_outline</mat-icon>
+          </button>
+          <span *ngIf="!l.details" class="text-hint">—</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Timestamp</th>
+        <td mat-cell *matCellDef="let l">{{ l.created_at | date:'dd MMM yyyy, HH:mm' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="cols"></tr>
+      <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-data" [attr.colspan]="cols.length">
+          <mat-icon>inbox</mat-icon> No logs found
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[15, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+</div>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

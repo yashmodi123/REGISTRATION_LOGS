@@ -1,0 +1,60 @@
+<mat-sidenav-container class="shell">
+  <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
+  <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpen" class="sidenav">
+    <div class="sidenav-header">
+      <img src="assets/logo.svg" alt="Logo" class="logo" onerror="this.style.display='none'"/>
+      <div class="brand">
+        <span class="brand-name">Admin Portal</span>
+        <span class="brand-sub">Device Registry</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list class="nav-list">
+      <a mat-list-item routerLink="/dashboard/registrations" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>devices</mat-icon>
+        <span matListItemTitle>Registrations</span>
+      </a>
+      <a mat-list-item routerLink="/dashboard/users" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>manage_accounts</mat-icon>
+        <span matListItemTitle>Admin Users</span>
+      </a>
+      <a mat-list-item routerLink="/dashboard/logs" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>Log History</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider></mat-divider>
+      <div class="user-info">
+        <mat-icon class="user-avatar">account_circle</mat-icon>
+        <div>
+          <p class="user-name">{{ user?.username }}</p>
+          <p class="user-email">{{ user?.email }}</p>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!-- ── Main content ─────────────────────────────────────────────────────── -->
+  <mat-sidenav-content class="main-content">
+    <!-- Topbar -->
+    <mat-toolbar class="topbar">
+      <button mat-icon-button (click)="toggleSidenav()" class="menu-btn">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="topbar-title">{{ pageTitle }}</span>
+      <span class="spacer"></span>
+      <button mat-icon-button matTooltip="Logout" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Routed pages -->
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

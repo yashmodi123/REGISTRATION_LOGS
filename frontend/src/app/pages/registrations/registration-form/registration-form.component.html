@@ -1,0 +1,83 @@
+<div class="form-page">
+  <div class="form-page-header">
+    <button mat-icon-button routerLink="/dashboard/registrations" matTooltip="Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ isEdit ? 'Edit Registration' : 'Add Registration' }}</h2>
+  </div>
+
+  <div class="card form-card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Machine Number</mat-label>
+          <mat-icon matPrefix>confirmation_number</mat-icon>
+          <input matInput formControlName="machine_number" id="field-machine-no"/>
+          <mat-error *ngIf="form.get('machine_number')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Company Name</mat-label>
+          <mat-icon matPrefix>business</mat-icon>
+          <input matInput formControlName="company_name" id="field-company"/>
+          <mat-error *ngIf="form.get('company_name')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput type="email" formControlName="email" id="field-email"/>
+          <mat-error *ngIf="form.get('email')?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date of Purchase</mat-label>
+          <mat-icon matPrefix>calendar_today</mat-icon>
+          <input matInput [matDatepicker]="dp" formControlName="date_of_purchase" id="field-dop"/>
+          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker #dp></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Device Type</mat-label>
+          <mat-icon matPrefix>phone_android</mat-icon>
+          <mat-select formControlName="device_type" id="field-device-type">
+            <mat-option value="">None</mat-option>
+            <mat-option value="Android">Android</mat-option>
+            <mat-option value="iOS">iOS</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <mat-icon matPrefix>public</mat-icon>
+          <input matInput formControlName="country" id="field-country"/>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>IP Address</mat-label>
+          <mat-icon matPrefix>router</mat-icon>
+          <input matInput formControlName="ip_address" id="field-ip"/>
+        </mat-form-field>
+
+        <div class="toggle-row form-full">
+          <mat-checkbox formControlName="is_using_sinar_mcal" color="primary" id="field-sinar">
+            Currently using SINAR-MCAL for calibrations
+          </mat-checkbox>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button mat-stroked-button type="button" routerLink="/dashboard/registrations">Cancel</button>
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="form.invalid || saving" id="btn-save-reg">
+          <mat-spinner diameter="18" *ngIf="saving"></mat-spinner>
+          <span *ngIf="!saving">{{ isEdit ? 'Update' : 'Register' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

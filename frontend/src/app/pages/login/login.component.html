@@ -1,0 +1,49 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <!-- Brand header -->
+    <div class="login-header">
+      <div class="logo-circle">
+        <mat-icon>devices</mat-icon>
+      </div>
+      <h1>Admin Portal</h1>
+      <p class="subtitle">Device Registration Management</p>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <mat-icon matPrefix>email</mat-icon>
+        <input matInput type="email" formControlName="email" placeholder="admin@example.com" id="login-email"/>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Enter a valid email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput [type]="showPass ? 'text' : 'password'" formControlName="password" id="login-password"/>
+        <button mat-icon-button matSuffix type="button" (click)="showPass = !showPass">
+          <mat-icon>{{ showPass ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+      </mat-form-field>
+
+      <div class="error-banner" *ngIf="errorMsg">
+        <mat-icon>error_outline</mat-icon> {{ errorMsg }}
+      </div>
+
+      <button mat-raised-button color="primary" type="submit"
+              [disabled]="form.invalid || loading" class="login-btn" id="login-submit">
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        <span *ngIf="!loading">Sign In</span>
+      </button>
+    </form>
+  </div>
+
+  <div class="login-bg">
+    <div class="bg-shape s1"></div>
+    <div class="bg-shape s2"></div>
+    <div class="bg-shape s3"></div>
+  </div>
+</div>

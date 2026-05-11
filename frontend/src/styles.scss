@@ -1,0 +1,116 @@
+@use '@angular/material' as mat;
+
+// ── Theme tokens (change here to retheme the whole app) ─────────────────────
+:root {
+  --color-primary:       #1565C0;
+  --color-primary-light: #1E88E5;
+  --color-primary-dark:  #0D47A1;
+  --color-accent:        #0288D1;
+  --color-warn:          #D32F2F;
+
+  --color-bg:            #F0F4F8;
+  --color-surface:       #FFFFFF;
+  --color-surface-2:     #E8EFF7;
+  --color-border:        #C5D3E8;
+
+  --color-text-primary:  #1A2A4A;
+  --color-text-secondary:#4A6080;
+  --color-text-hint:     #8AA0BB;
+
+  --color-success:       #2E7D32;
+  --color-error:         #C62828;
+
+  --shadow-sm: 0 1px 3px rgba(21,101,192,0.10);
+  --shadow-md: 0 4px 16px rgba(21,101,192,0.13);
+  --shadow-lg: 0 8px 32px rgba(21,101,192,0.16);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --sidebar-width: 240px;
+  --topbar-height: 64px;
+}
+
+// ── Angular Material theme ───────────────────────────────────────────────────
+html {
+  height: 100%;
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+// ── Global utilities ─────────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
+
+a { color: var(--color-primary); text-decoration: none; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+}
+
+.chip-success { background: #E8F5E9 !important; color: #2E7D32 !important; font-weight: 500; }
+.chip-error   { background: #FFEBEE !important; color: #C62828 !important; font-weight: 500; }
+.chip-usage   { background: #E3F2FD !important; color: #1565C0 !important; font-weight: 500; }
+
+.text-muted { color: var(--color-text-secondary); }
+.text-hint  { color: var(--color-text-hint); font-size: 0.85rem; }
+
+// ── Form layout ──────────────────────────────────────────────────────────────
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+.form-full { grid-column: 1 / -1; }
+
+mat-form-field { width: 100%; }
+
+// ── Table tweaks ─────────────────────────────────────────────────────────────
+.mat-mdc-table { width: 100%; }
+.mat-mdc-row:hover { background: var(--color-surface-2) !important; }
+.mat-column-actions { width: 120px; text-align: center !important; }
+
+// ── Buttons ──────────────────────────────────────────────────────────────────
+.btn-icon-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+// ── Snackbar ─────────────────────────────────────────────────────────────────
+.snack-success .mdc-snackbar__surface { background: var(--color-success) !important; }
+.snack-error   .mdc-snackbar__surface { background: var(--color-error)   !important; }
