@@ -17,15 +17,15 @@ import Link from 'next/link';
 const DRAWER_WIDTH = 260;
 
 const navItems = [
-  { label: 'Admin Users',     icon: <ManageAccountsIcon />, href: '/dashboard/users' },
-  { label: 'Registrations',   icon: <DevicesIcon />,         href: '/dashboard/registrations' },
-  { label: 'Log History',     icon: <ReceiptLongIcon />,      href: '/dashboard/logs' },
+  { label: 'Admin Users', icon: <ManageAccountsIcon />, href: '/dashboard/users' },
+  { label: 'Registrations', icon: <DevicesIcon />, href: '/dashboard/registrations' },
+  { label: 'Log History', icon: <ReceiptLongIcon />, href: '/dashboard/logs' },
 ];
 
 const pageTitles: Record<string, string> = {
   '/dashboard/registrations': 'Machine Registrations',
-  '/dashboard/logs':          'Log History',
-  '/dashboard/users':         'Admin Users',
+  '/dashboard/logs': 'Log History',
+  '/dashboard/users': 'Admin Users',
 };
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

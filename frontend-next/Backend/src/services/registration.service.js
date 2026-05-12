@@ -18,7 +18,7 @@ const getRegistrationByEmail = async (email) => {
 const { Op } = require('sequelize');
 
 const getAllRegistrations = async (filters = {}) => {
-  const { page = 1, limit = 10, search = '' } = filters;
+  const { page = 1, limit = 10, search = '', startDate, endDate } = filters;
   const offset = (page - 1) * limit;
 
   const where = {};
@@ -29,6 +29,13 @@ const getAllRegistrations = async (filters = {}) => {
       { machine_number: { [Op.like]: `%${search}%` } },
       { country: { [Op.like]: `%${search}%` } }
     ];
+  }
+
+  // Date range filter (used for CSV export)
+  if (startDate || endDate) {
+    where.created_at = {};
+    if (startDate) where.created_at[Op.gte] = new Date(startDate);
+    if (endDate)   where.created_at[Op.lte] = new Date(endDate);
   }
 
   const { count, rows } = await Registration.findAndCountAll({

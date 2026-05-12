@@ -82,7 +82,13 @@ export default function LogsClient() {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: '#', width: 60 },
+    {
+      field: '_no',
+      headerName: 'Sr. No',
+      width: 70,
+      sortable: false,
+      renderCell: (p) => filtered.indexOf(p.row) + 1,
+    },
     { field: 'type', headerName: 'Type', width: 120, renderCell: (p) => <Chip label={p.value} size="small" color={typeColor(p.value)} variant="outlined" /> },
     { field: 'machine_number', headerName: 'Machine #', width: 120, valueGetter: (_v: any, row: any) => row.registration?.machine_number ?? '—' },
     { field: 'company_name', headerName: 'Company', flex: 1, valueGetter: (_v: any, row: any) => row.registration?.company_name ?? '—' },

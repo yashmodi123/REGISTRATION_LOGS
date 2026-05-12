@@ -46,7 +46,13 @@ export default function UsersClient() {
   );
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: '#', width: 60 },
+    {
+      field: '_no',
+      headerName: 'Sr. No',
+      width: 70,
+      sortable: false,
+      renderCell: (p) => filtered.indexOf(p.row) + 1,
+    },
     {
       field: 'username', headerName: 'Username', flex: 1,
       renderCell: (p) => (

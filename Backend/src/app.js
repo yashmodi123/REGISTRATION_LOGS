@@ -31,11 +31,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/user-auth', userAuthRoutes);
 app.use('/api/logs', logRoutes);
 
-// Catch-all for Frontend SPA (serve index.html)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
-});
-
 // Error Handling Middleware
 app.use(errorHandler);
 

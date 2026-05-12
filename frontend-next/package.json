@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
+    "dev:next": "next dev --port 4000",
+    "dev:backend": "node Backend/src/server.js",
     "start": "NODE_ENV=production node server.js",
     "build": "next build",
-    "next-dev": "next dev --port 4000",
     "lint": "eslint"
   },
   "dependencies": {

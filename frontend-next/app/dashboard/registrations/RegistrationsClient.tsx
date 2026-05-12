@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Box, Card, Typography, TextField, Button, Chip,
-  IconButton, Tooltip,
+  IconButton, Tooltip, Dialog, DialogTitle, DialogContent,
+  DialogActions, RadioGroup, FormControlLabel, Radio, CircularProgress,
 } from '@mui/material';
 import { DataGrid, GridColDef, GridPaginationModel } from '@mui/x-data-grid';
 import SearchIcon from '@mui/icons-material/Search';
@@ -41,6 +42,13 @@ export default function RegistrationsPage() {
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ── Export dialog ──────────────────────────────────────────────────────────
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportMode, setExportMode] = useState<'full' | 'range'>('full');
+  const [exportStart, setExportStart] = useState('');
+  const [exportEnd, setExportEnd] = useState('');
+  const [exporting, setExporting] = useState(false);
+
   const load = useCallback(async (s: string, pg: GridPaginationModel) => {
     setLoading(true);
     try {
@@ -71,20 +79,49 @@ export default function RegistrationsPage() {
     load(search, paginationModel);
   };
 
-  const downloadCSV = () => {
-    if (!rows.length) return;
-    const headers = ['ID', 'Machine #', 'Company', 'Email', 'Country', 'SINAR-MCAL', 'Created At'];
-    const csvContent = [headers.join(','),
-      ...rows.map(r => [r.id, r.machine_number, r.company_name, r.email, r.country, r.is_using_sinar_mcal, r.created_at]
+  const buildCSV = (data: Registration[]) => {
+    const headers = ['ID', 'Machine #', 'Company', 'Email', 'Country', 'SINAR-MCAL', 'Registered At'];
+    return [headers.join(','),
+      ...data.map(r => [r.id, r.machine_number, r.company_name, r.email, r.country,
+        r.is_using_sinar_mcal ? 'Yes' : 'No', r.created_at]
         .map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
     ].join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csvContent], { type: 'text/csv' }));
-    a.download = `registrations_${Date.now()}.csv`; a.click();
+  };
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const params: Record<string, string | number> = { limit: 99999, page: 1 };
+      if (exportMode === 'range') {
+        if (exportStart) params.startDate = new Date(exportStart).toISOString();
+        if (exportEnd)   params.endDate   = new Date(exportEnd).toISOString();
+      }
+      const res = await api.get('/registrations', { params });
+      const data: Registration[] = res.data.data ?? [];
+      if (!data.length) { alert('No records found for the selected range.'); return; }
+      const csv = buildCSV(data);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      const suffix = exportMode === 'range'
+        ? `${exportStart.slice(0, 10)}_to_${exportEnd.slice(0, 10)}`
+        : 'full';
+      a.download = `registrations_${suffix}.csv`;
+      a.click();
+      setExportOpen(false);
+    } finally { setExporting(false); }
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: '#', width: 60 },
+    {
+      field: '_no',
+      headerName: 'Sr. No',
+      width: 70,
+      sortable: false,
+      renderCell: (p) => {
+        const index = rows.findIndex(r => r.id === p.row.id);
+        return paginationModel.page * paginationModel.pageSize + index + 1;
+      },
+    },
     { field: 'machine_number', headerName: 'Machine #', flex: 1, renderCell: (p) => <strong>{p.value}</strong> },
     { field: 'company_name', headerName: 'Company', flex: 1.2 },
     { field: 'email', headerName: 'Email', flex: 1.5 },
@@ -144,7 +181,7 @@ export default function RegistrationsPage() {
           <TextField placeholder="Search machines…" size="small" sx={{ flex: 1, minWidth: 200 }}
             value={search} onChange={(e) => handleSearch(e.target.value)}
             slotProps={{ input: { startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} /> } }} />
-          <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={downloadCSV} size="small">Export CSV</Button>
+          <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={() => setExportOpen(true)} size="small">Export CSV</Button>
           <Button variant="contained" startIcon={<AddIcon />} component={Link} href="/dashboard/registrations/new" size="small" id="btn-add-reg">Add Registration</Button>
         </Box>
         <DataGrid rows={rows} columns={columns} rowCount={total}
@@ -153,6 +190,46 @@ export default function RegistrationsPage() {
           pageSizeOptions={[10, 25, 50]} loading={loading}
           disableRowSelectionOnClick autoHeight sx={{ border: 'none', minHeight: 400 }} />
       </Card>
+      {/* ── Export Dialog ── */}
+      <Dialog open={exportOpen} onClose={() => setExportOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid #eee', pb: 1.5 }}>
+          📥 Export Registrations CSV
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2.5 }}>
+          <RadioGroup value={exportMode} onChange={(e) => setExportMode(e.target.value as 'full' | 'range')}>
+            <FormControlLabel value="full" control={<Radio />} label="Full Report (all records)" />
+            <FormControlLabel value="range" control={<Radio />} label="Filter by Date Range" />
+          </RadioGroup>
+
+          {exportMode === 'range' && (
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                label="From Date" type="date" size="small" fullWidth
+                value={exportStart}
+                onChange={(e) => setExportStart(e.target.value)}
+                slotProps={{ inputLabel: { shrink: true } }}
+              />
+              <TextField
+                label="To Date" type="date" size="small" fullWidth
+                value={exportEnd}
+                onChange={(e) => setExportEnd(e.target.value)}
+                slotProps={{ inputLabel: { shrink: true } }}
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
+          <Button variant="outlined" onClick={() => setExportOpen(false)} disabled={exporting}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleExport}
+            disabled={exporting || (exportMode === 'range' && (!exportStart || !exportEnd))}
+            startIcon={exporting ? <CircularProgress size={16} color="inherit" /> : <FileDownloadIcon />}
+          >
+            {exporting ? 'Exporting…' : 'Download CSV'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
