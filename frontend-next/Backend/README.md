@@ -1,0 +1,44 @@
+# Device Login Admin — Backend
+
+The backend server for the Device Login Admin portal. It provides RESTful APIs for authentication, admin management, machine registrations, and log history.
+
+## 📋 Prerequisites
+- **Node.js**: v18.x or higher
+- **Database**: Microsoft SQL Server (recommended) or SQLite for local testing.
+
+## ⚙️ Installation
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Environment Configuration**:
+   Create a `.env` file in the root of the `/Backend` folder:
+   ```env
+   PORT=3000
+   JWT_SECRET=your_super_secret_key_here
+   
+   # Database Configuration (MSSQL)
+   DB_NAME=device_admin
+   DB_USER=sa
+   DB_PASS=your_password
+   DB_HOST=localhost
+   DB_DIALECT=mssql
+   ```
+
+3. **Database Initialization**:
+   The system uses Sequelize. It will automatically create tables on the first run if the database exists.
+
+4. **Running the Server**:
+   - **Development**: `npm run dev` (uses nodemon)
+   - **Production**: `npm start`
+
+## 📁 Static Frontend Hosting
+The backend is configured to serve the frontend from the `public/` folder.
+- Any request not starting with `/api` will serve `index.html` from `public/`.
+- To update the UI, build the frontend and copy the files to `Backend/public`.
+
+## 📖 API Documentation
+Once the server is running, you can view the Swagger documentation at:
+`http://localhost:3000/api-docs`
