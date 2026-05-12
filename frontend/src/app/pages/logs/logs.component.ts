@@ -144,7 +144,7 @@ export class LogsComponent implements OnInit {
       return;
     }
 
-    const headers = ['ID', 'Type', 'Machine #', 'Company', 'Email', 'Message', 'Created At'];
+    const headers = ['ID', 'Type', 'Machine #', 'Company', 'Email', 'Message', 'Details', 'Created At'];
     const rows = data.map(l => [
       l.id,
       l.type,
@@ -152,6 +152,7 @@ export class LogsComponent implements OnInit {
       l.registration?.company_name || '',
       l.email || '',
       l.message,
+      typeof l.details === 'object' ? JSON.stringify(l.details) : l.details || '',
       l.created_at
     ]);
 
