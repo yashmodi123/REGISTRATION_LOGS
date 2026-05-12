@@ -2,19 +2,19 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
-  Box, Drawer, AppBar, Toolbar, IconButton, Typography, List, ListItem,
-  ListItemButton, ListItemIcon, ListItemText, Divider, Avatar, Tooltip,
-  useMediaQuery, useTheme,
+  Box, Drawer, AppBar, Toolbar, IconButton, Typography,
+  Avatar, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DevicesIcon from '@mui/icons-material/Devices';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 240;
 
 const navItems = [
   { label: 'Admin Users', icon: <ManageAccountsIcon />, href: '/dashboard/users' },
@@ -52,73 +52,88 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pageTitle = Object.entries(pageTitles).find(([k]) => pathname?.startsWith(k))?.[1] ?? 'Dashboard';
 
   const drawer = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      {/* Brand */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#0d0d0d' }}>
+
+      {/* ── Brand header ── */}
       <Box sx={{
-        p: 2.5,
+        px: 2.5, py: 2,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 1,
-        background: 'linear-gradient(160deg, rgba(245,124,0,0.08) 0%, transparent 100%)',
-        borderBottom: '1px solid rgba(245,124,0,0.15)',
+        gap: 0.5,
+        borderBottom: '1px solid #1a1a1a',
       }}>
         <Image
           src="/assets/SINAR-TECHNOLOGY-LOGO.avif"
-          alt="Sinar Technology Logo"
-          width={150}
-          height={60}
-          style={{ objectFit: 'contain', width: '100%', maxWidth: 150, height: 'auto' }}
+          alt="Sinar Technology"
+          width={160} height={56}
+          style={{ objectFit: 'contain', width: '100%', maxWidth: 160, height: 'auto' }}
           priority
         />
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography sx={{ fontWeight: 700, fontSize: 13, color: 'primary.main', letterSpacing: 0.5 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
+          <Typography sx={{ fontWeight: 700, fontSize: 20, color: '#fff', letterSpacing: 0.4 }}>
             Admin Portal
-          </Typography>
-          <Typography sx={{ fontSize: 10, color: 'text.secondary', letterSpacing: 0.3 }}>
-            Device Registry Management
           </Typography>
         </Box>
       </Box>
+      <Box sx={{ width: '100%', height: '0.5px', bgcolor: 'rgba(251, 251, 251, 0.64)' }} />
 
-      <List sx={{ flex: 1, px: 1, py: 1.5 }}>
+      {/* ── Navigation ── */}
+      <Box sx={{ flex: 1, py: 1.5 }}>
         {navItems.map(({ label, icon, href }) => {
           const active = pathname?.startsWith(href);
           return (
-            <ListItem key={href} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                component={Link} href={href}
-                selected={active}
-                sx={{
-                  borderRadius: 2,
-                  '&.Mui-selected': {
-                    background: 'rgba(245,124,0,0.15)',
-                    borderLeft: '3px solid #F57C00',
-                    '& .MuiListItemIcon-root': { color: 'primary.main' },
-                    '& .MuiListItemText-primary': { color: 'primary.main', fontWeight: 700 },
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 36, color: active ? 'primary.main' : 'text.secondary' }}>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText primary={label} />
-              </ListItemButton>
-            </ListItem>
+            <Box
+              key={href}
+              component={Link}
+              href={href}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                px: 2,
+                py: 1.4,
+                mx: 1,
+                mb: 0.5,
+                borderRadius: '6px',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                transition: 'background 0.15s',
+                bgcolor: active ? '#F57C00' : 'transparent',
+                '&:hover': {
+                  bgcolor: active ? '#e65100' : 'rgba(255,255,255,0.06)',
+                },
+              }}
+            >
+              <Box sx={{ color: active ? '#fff' : '#888', display: 'flex', fontSize: 20 }}>
+                {icon}
+              </Box>
+              <Typography sx={{
+                fontSize: 13.5,
+                fontWeight: active ? 700 : 400,
+                color: active ? '#fff' : '#aaa',
+                letterSpacing: 0.2,
+              }}>
+                {label}
+              </Typography>
+            </Box>
           );
         })}
-      </List>
+      </Box>
 
-      <Divider sx={{ borderColor: '#2a2a2a' }} />
-      {/* User info */}
+      {/* ── User section ── */}
       {user && (
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: 14 }}>
-            {user.username[0]?.toUpperCase()}
-          </Avatar>
-          <Box sx={{ flex: 1, overflow: 'hidden' }}>
-            <Typography sx={{ fontSize: 13, fontWeight: 600 }} noWrap>{user.username}</Typography>
-            <Typography sx={{ fontSize: 11, color: 'text.secondary' }} noWrap>{user.email}</Typography>
+        <Box sx={{ borderTop: '1px solid #1a1a1a' }}>
+          <Box sx={{ px: 2, py: 1.8, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <AccountCircleIcon sx={{ fontSize: 36, color: '#555' }} />
+            <Box sx={{ flex: 1, overflow: 'hidden' }}>
+              <Typography sx={{ fontSize: 13, fontWeight: 600, color: '#ddd' }} noWrap>
+                {user.username}
+              </Typography>
+              <Typography sx={{ fontSize: 11, color: '#666' }} noWrap>
+                {user.email}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       )}
@@ -135,13 +150,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         sx={{
           width: open ? DRAWER_WIDTH : 0,
           flexShrink: 0,
-          '& .MuiDrawer-paper': { width: DRAWER_WIDTH, boxSizing: 'border-box' },
+          '& .MuiDrawer-paper': {
+            width: DRAWER_WIDTH,
+            boxSizing: 'border-box',
+            bgcolor: '#0d0d0d',
+            border: 'none',
+            borderRight: '1px solid #1a1a1a',
+          },
         }}
       >
         {drawer}
       </Drawer>
 
-      {/* Main */}
+      {/* Main content */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <AppBar position="sticky" elevation={0}
           sx={{ borderBottom: '1px solid #1e1e1e', zIndex: theme.zIndex.drawer - 1 }}>
