@@ -9,7 +9,7 @@ Log.belongsTo(Registration, { foreignKey: 'registration_id', as: 'registration' 
 
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: false });
     console.log('Database synced successfully.');
   } catch (error) {
     console.error('Error syncing database:', error);

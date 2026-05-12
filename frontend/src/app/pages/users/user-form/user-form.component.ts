@@ -54,9 +54,12 @@ export class UserFormComponent implements OnInit {
     this.saving = true;
     const val = this.form.value;
 
+    const payload: any = { username: val.username, email: val.email };
+    if (val.password) payload.password = val.password;
+
     const action = this.isEdit
-      ? this.userSvc.update(this.userId!, { username: val.username!, email: val.email! })
-      : this.userSvc.create({ username: val.username!, email: val.email!, password: val.password! });
+      ? this.userSvc.update(this.userId!, payload)
+      : this.userSvc.create(payload);
 
     action.pipe(finalize(() => this.saving = false)).subscribe({
       next: () => {

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,6 +19,7 @@ export class UserListComponent implements OnInit {
   dataSource = new MatTableDataSource<AdminUser>();
   users: AdminUser[] = [];
   loading = true;
+  debugMode = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -25,10 +27,16 @@ export class UserListComponent implements OnInit {
   constructor(
     private userSvc: UserService,
     private snack: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit() { this.load(); }
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.debugMode = params['debug'] === '1';
+    });
+    this.load();
+  }
 
   load() {
     this.loading = true;

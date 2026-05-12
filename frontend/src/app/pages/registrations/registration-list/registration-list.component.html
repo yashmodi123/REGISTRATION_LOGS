@@ -82,7 +82,7 @@
                     [routerLink]="['/dashboard/registrations', r.id, 'edit']" [id]="'edit-reg-'+r.id">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" matTooltip="Delete"
+            <button mat-icon-button color="warn" matTooltip="Delete" *ngIf="debugMode"
                     (click)="confirmDelete(r)" [id]="'del-reg-'+r.id">
               <mat-icon>delete</mat-icon>
             </button>

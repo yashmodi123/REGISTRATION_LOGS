@@ -24,13 +24,14 @@
           <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" *ngIf="!isEdit">
-          <mat-label>Password</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ isEdit ? 'New Password (optional)' : 'Password' }}</mat-label>
           <mat-icon matPrefix>lock</mat-icon>
           <input matInput [type]="showPass ? 'text' : 'password'" formControlName="password" id="field-password"/>
           <button mat-icon-button matSuffix type="button" (click)="showPass = !showPass">
             <mat-icon>{{ showPass ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+          <mat-hint *ngIf="isEdit">Leave blank to keep current password</mat-hint>
           <mat-error *ngIf="form.get('password')?.hasError('required')">Required</mat-error>
           <mat-error *ngIf="form.get('password')?.hasError('minlength')">Min 6 characters</mat-error>
         </mat-form-field>

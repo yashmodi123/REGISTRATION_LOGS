@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -22,6 +22,7 @@ export class RegistrationListComponent implements OnInit {
   total    = 0;
   usingMcal = 0;
   loading  = true;
+  debugMode = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -30,12 +31,17 @@ export class RegistrationListComponent implements OnInit {
     private regSvc: RegistrationService,
     private snack: MatSnackBar,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   private searchSubject = new Subject<string>();
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.debugMode = params['debug'] === '1';
+    });
+    
     this.load();
     this.searchSubject.pipe(
       debounceTime(500),

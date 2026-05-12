@@ -52,8 +52,8 @@ import { Log } from '../../../core/services/log.service';
       margin-top: 24px;
       label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 0.75rem; color: var(--color-text-hint); text-transform: uppercase; letter-spacing: 0.5px; }
       pre {
-        background: #000;
-        color: #81C784;
+        background: #1e1e1e;
+        color: #dcdcdc;
         padding: 16px;
         border-radius: 4px;
         font-size: 0.85rem;
@@ -67,7 +67,7 @@ import { Log } from '../../../core/services/log.service';
         
         &::-webkit-scrollbar { width: 8px; }
         &::-webkit-scrollbar-track { background: transparent; }
-        &::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        &::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
       }
     }
   `]
