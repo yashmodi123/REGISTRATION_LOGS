@@ -38,9 +38,14 @@ const getAllRegistrations = async (filters = {}) => {
     offset: parseInt(offset)
   });
 
+  const usingMcalCount = await Registration.count({
+    where: { ...where, is_using_sinar_mcal: true }
+  });
+
   return {
     total: count,
     data: rows,
+    usingMcalCount,
     page: parseInt(page),
     limit: parseInt(limit),
     totalPages: Math.ceil(count / limit)

@@ -70,6 +70,7 @@ export class RegistrationListComponent implements OnInit {
         const data = res?.data || [];
         this.dataSource.data = data;
         this.total = res.total || 0;
+        this.usingMcal = res.usingMcalCount || 0;
         this.loading = false;
       },
       error: () => { this.loading = false; }

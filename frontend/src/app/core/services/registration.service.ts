@@ -27,7 +27,7 @@ export class RegistrationService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(filters: any = {}): Observable<{ success: boolean; data: Registration[]; total: number; page: number; limit: number; totalPages: number }> {
+  getAll(filters: any = {}): Observable<{ success: boolean; data: Registration[]; total: number; usingMcalCount: number; page: number; limit: number; totalPages: number }> {
     let params = {};
     if (filters) {
       params = { ...filters };
